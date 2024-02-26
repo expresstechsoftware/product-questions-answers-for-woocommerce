@@ -1,3 +1,4 @@
+
 <?php  
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -179,7 +180,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 				<div class="ets-dis-message-error"><p></p></div>
 				<button id="ets-submit" type="submit" name="submit" class="btn btn-info" ><?php echo __('Submit','product-questions-answers-for-woocommerce'); ?></button> 
 			</form>
-			<div id="ets_product_qa_length"><p></p></div>   
+		  
 			<?php 	
 		} else { ?>
 
@@ -188,7 +189,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 				<input type="hidden" id="productlength" class="productlength" name="Product_Qa_Length" value="<?php echo $productQaLength ?>">  
 				<input type="hidden" id="producttitle" name="ets_Product_Title" value="<?php echo $productTitle ?>"> 
 			</form>
-			<div id="ets_product_qa_length"><p></p></div> 
+			
 			<?php
 				global $wp;
 
@@ -197,18 +198,21 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 					__( 'Please <a href="%s">login</a> to post questions', 'product-questions-answers-for-woocommerce' ),
 					apply_filters( 'wc_add_qa_login_url', wp_login_url(home_url( $wp->request )) )
 				);
-			?>
-			<?php  
+			 
 		} 
 		
-		$this->display_qa_listing();
+			?>
+		<div id="qa-tab-qa-listing">
+			<?php $this->display_qa_listing($container_id = '2'); ?>
+		</div>
+		<?php
 		 		
 	}
 
 	/**
  	*Prepare QA listing data.
  	*/
-	public function display_qa_listing(){
+	public function display_qa_listing($container_id = '1'){
 		global $product; 
 		$productId = $product->get_id(); 
 		$loadMoreButtonName = get_option('ets_load_more_button_name');
@@ -225,9 +229,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 		}
 		
 		if(!empty($etsGetQuestion)){ 
-			end( $etsGetQuestion);
-			$keyData =  max(array_keys($etsGetQuestion));
-
+			$keyData = count($etsGetQuestion);
         } 
 
 			if($loadMoreButton == 1) { 
@@ -284,14 +286,14 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 						
 					}
 					?> 
-					<div class='ets-accordion-response-add'></div>
+					<div class='ets-accordion-response-add ets-accordion-list-qa-<?php echo $container_id; ?>'></div>
 					</div>
 					<?php
 				} else {
 						?>
 						<div class="table-responsive my-table">
 						<table class="table table-striped">
-						<tbody class="table1">
+						<tbody class="table1 ets-list-table-<?php echo $container_id; ?>">
 						<?php
 						//Show Question Answer Listing Type Table With Load More 
 						foreach ($etsGetQuestion as $key => $value) {
@@ -331,8 +333,9 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 						<?php					
 				}
 				 	?>  
-				<button type="submit" id="ets-load-more" class="btn btn-success" name="ets_load_more" value=""><?php echo $loadMoreButtonName; ?></button>
-				<div class="ets_pro_qa_length"><p hidden><?php echo $keyData;?><p></div>
+				<button type="submit" id="ets-load-more-<?php echo $container_id; ?>" class="btn btn-success ets-qa-load-more" data-container-id="<?php echo $container_id; ?>" name="ets_load_more" value=""><?php echo $loadMoreButtonName; ?></button>
+				<div class="ets_pro_qa_length_<?php echo $container_id; ?>"><p hidden><?php echo $keyData;?><p></div><div id="ets_product_qa_length_<?php echo $container_id; ?>"><p></p></div>
+	
 				<?php
 			}
 		} else {
@@ -439,19 +442,8 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER
 			});
 		}
 
-		$offset = $a = $offsetdata + $productQaLength; 
-		$etsGetQuestion = [];
-		
-		end($filteredQue);  
-		$last_key = key($filteredQue); 
-
-		foreach (range(0,intval($productQaLength)) as $index) {
-
-			if(isset($filteredQue[$a])){
-				$etsGetQuestion[] = $filteredQue[$a];
-				$a++;
-			}
-		}
+		$offset = $offsetdata + $productQaLength;
+		$etsGetQuestion = array_slice($filteredQue, $offset, $productQaLength);
 		
 		if(!empty($etsGetQuestion)){ 
 			ob_start(); 
