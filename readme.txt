@@ -8,7 +8,7 @@ Tags: questions, answers, discussions, woocommerce, forum, storefront, details,	
 Requires PHP: 7.0
 Requires at least: 5.6
 Tested up to: 6.5
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,3 +86,6 @@ No configuration needed! just install and it will start working from there, you 
 
 = 1.2.6 =
 - Dev: Added the shortcode [display_qa_list]
+
+= 1.2.7 =
+- Fixed the blockage in the AJAX requests.
