@@ -411,7 +411,10 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 				"user_email"      =>   $newUserEmail,
 				"user_id"	      =>   $newUserId, 
 				"approve"		  =>   $admin_approve 
-			); 
+			);
+
+			$productFirstQa = apply_filters('ets_new_first_question', $productFirstQa, $productId);
+
 			update_post_meta( $productId, 'ets_question_answer',  $productFirstQa );
 		}  
 
@@ -432,6 +435,8 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					"user_id"	       =>   $newUserId, 
 					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no' 
 				);
+
+				$productNewQas[$qkey] = apply_filters('ets_new_question', $productNewQas[$qkey], $productId);
 				
 				if(empty($productNewQas[$qkey]['question'])) {
 					unset($productNewQas[$qkey]);
@@ -464,6 +469,8 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no' 
 				
 				);
+
+				$productQas[$qkey] = apply_filters('ets_modify_question_data', $productQas[$qkey], $productId, $qkey);
 
 				if(empty($productQas[$qkey]['question'])) {
 					unset($productQas[$qkey]);
