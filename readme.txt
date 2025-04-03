@@ -8,7 +8,7 @@ Tags: questions, answers, discussions, woocommerce, forum, storefront, details,	
 Requires PHP: 7.0
 Requires at least: 5.6
 Tested up to: 6.5
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,8 @@ You can also drag and drop questions to change their order of appearance.
 4. Infinite AJAX loading on frontend, so your customers can view all questions without reloading the page.
 5. Enable/Disable paginations, change page size, update "Load More" button text and layout. 
 6. Two question-answer layouts available for front-end: Normal and Accordion.
-7. Shortcode [display_qa_list] to display the list of questions and answers anywhere. Use product_id as the optional parameter if you are not using it on the product page.
+7. Shortcode [display_qa_list] to display the list of questions and answers anywhere. If not used on a product page, include the product_id parameter to specify the product.
+8. Shortcode [qa_form] to display the question submission form for a product. If you are using it on a page other than the WooCommerce product page, include the product_id parameter to specify the ID of the product you want to associate the question with.
 
 
 == Installation ==
@@ -92,3 +93,6 @@ No configuration needed! just install and it will start working from there, you 
 
 = 1.2.8 =
 - Dev: Replaced old text domain to some places
+
+= 1.2.9 =
+- Dev: Added new shortcode [qa_form] to display the form at any location.

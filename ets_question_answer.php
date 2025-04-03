@@ -3,11 +3,11 @@
  * Plugin Name: Product Questions & Answers for WooCommerce
  * Plugin URI:  https://www.expresstechsoftwares.com
  * Description: <code><strong>ETS WooCommerce Questions And Answers</strong></code> offers a rapid way to manage dynamic discussions about your Woo products. <a href="https://www.expresstechsoftwares.com">Get more plugins and custom development for WordPress on <strong>ETS</strong></a>.
- * Version: 1.2.8
+ * Version: 1.2.9
  * Author: ExpressTech Software Solutions Pvt. Ltd.
  * Author URI: https://www.expresstechsoftwares.com
  * Requires at least: 5.6
- * WC tested up to: 8.1
+ * WC tested up to: 9.7.1
  * Requires PHP: 7.0
  * Text Domain: product-questions-answers-for-woocommerce
  * Domain Path: /languages

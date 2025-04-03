@@ -1,17 +1,17 @@
-# Copyright (C) 2024 ExpressTech Software Solutions Pvt. Ltd.
+# Copyright (C) 2025 ExpressTech Software Solutions Pvt. Ltd.
 # This file is distributed under the same license as the Product Questions & Answers for WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Product Questions & Answers for WooCommerce 1.2.6\n"
+"Project-Id-Version: Product Questions & Answers for WooCommerce 1.2.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/product-questions-answers-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-08T00:17:53+00:00\n"
+"POT-Creation-Date: 2025-04-03T14:45:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: product-questions-answers-for-woocommerce\n"
 
 #. Plugin Name of the plugin
@@ -37,7 +37,7 @@ msgstr ""
 
 #: includes/ets_admin_qa_function.php:58
 #: includes/ets_admin_qa_function.php:621
-#: includes/ets_user_qa_function.php:56
+#: includes/ets_user_qa_function.php:63
 msgid "Access not allowed"
 msgstr ""
 
@@ -45,7 +45,7 @@ msgstr ""
 #: includes/ets_admin_qa_function.php:108
 #: includes/ets_admin_qa_function.php:116
 #: includes/ets_admin_qa_function.php:135
-#: includes/ets_user_qa_function.php:221
+#: includes/ets_user_qa_function.php:285
 msgid "Load More"
 msgstr ""
 
@@ -78,36 +78,36 @@ msgid "Auto Approve"
 msgstr ""
 
 #: includes/ets_admin_qa_function.php:162
-#: includes/ets_user_qa_function.php:177
+#: includes/ets_user_qa_function.php:184
 msgid "Submit"
 msgstr ""
 
 #: includes/ets_admin_qa_function.php:176
-#: includes/ets_user_qa_function.php:41
+#: includes/ets_user_qa_function.php:48
 msgid "Q & A"
 msgstr ""
 
 #: includes/ets_admin_qa_function.php:267
 #: includes/ets_admin_qa_function.php:328
 #: includes/ets_admin_qa_function.php:637
-#: includes/ets_user_qa_function.php:245
-#: includes/ets_user_qa_function.php:289
-#: includes/ets_user_qa_function.php:336
-#: includes/ets_user_qa_function.php:421
-#: includes/ets_user_qa_function.php:461
+#: includes/ets_user_qa_function.php:307
+#: includes/ets_user_qa_function.php:352
+#: includes/ets_user_qa_function.php:406
+#: includes/ets_user_qa_function.php:534
+#: includes/ets_user_qa_function.php:579
 msgid "Question"
 msgstr ""
 
 #: includes/ets_admin_qa_function.php:276
 #: includes/ets_admin_qa_function.php:337
 #: includes/ets_admin_qa_function.php:646
-#: includes/ets_user_qa_function.php:252
-#: includes/ets_user_qa_function.php:259
-#: includes/ets_user_qa_function.php:298
-#: includes/ets_user_qa_function.php:346
-#: includes/ets_user_qa_function.php:352
-#: includes/ets_user_qa_function.php:428
-#: includes/ets_user_qa_function.php:471
+#: includes/ets_user_qa_function.php:315
+#: includes/ets_user_qa_function.php:323
+#: includes/ets_user_qa_function.php:365
+#: includes/ets_user_qa_function.php:420
+#: includes/ets_user_qa_function.php:427
+#: includes/ets_user_qa_function.php:542
+#: includes/ets_user_qa_function.php:593
 msgid "Answer"
 msgstr ""
 
@@ -128,37 +128,49 @@ msgstr ""
 msgid "Your Question was Answered"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:65
+#: includes/ets_user_qa_function.php:75
 msgid "You are not logged in"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:113
+#: includes/ets_user_qa_function.php:124
 msgid "Question submitted successfully"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:123
+#: includes/ets_user_qa_function.php:133
 msgid "Please enter your question"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:170
+#: includes/ets_user_qa_function.php:177
 msgid "Enter your question here"
 msgstr ""
 
 #. translators: login URL
-#: includes/ets_user_qa_function.php:194
+#: includes/ets_user_qa_function.php:201
 msgid "Please <a href=\"%s\">login</a> to post questions"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:260
-#: includes/ets_user_qa_function.php:306
-#: includes/ets_user_qa_function.php:353
-#: includes/ets_user_qa_function.php:436
-#: includes/ets_user_qa_function.php:478
+#: includes/ets_user_qa_function.php:324
+#: includes/ets_user_qa_function.php:373
+#: includes/ets_user_qa_function.php:428
+#: includes/ets_user_qa_function.php:551
+#: includes/ets_user_qa_function.php:601
 msgid "Answer awaiting"
 msgstr ""
 
-#: includes/ets_user_qa_function.php:305
-#: includes/ets_user_qa_function.php:435
-#: includes/ets_user_qa_function.php:477
+#: includes/ets_user_qa_function.php:372
+#: includes/ets_user_qa_function.php:550
+#: includes/ets_user_qa_function.php:600
 msgid "Answer:"
+msgstr ""
+
+#: includes/ets_user_qa_function.php:466
+msgid "Please provide a valid product ID."
+msgstr ""
+
+#: includes/ets_user_qa_function.php:483
+msgid "Product not found."
+msgstr ""
+
+#: includes/ets_user_qa_function.php:486
+msgid "Product ID is required."
 msgstr ""
