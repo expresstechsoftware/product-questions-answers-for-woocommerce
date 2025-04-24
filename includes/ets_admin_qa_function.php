@@ -121,6 +121,8 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					
 
 				} 
+				
+				do_action( 'ets_product_qa_setting_save' );
 			}			 	 
 		} 
 		$aprValue = get_option('ets_qa_approve');
@@ -158,13 +160,16 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					<td><h4><?php echo __('Auto Approve','product-questions-answers-for-woocommerce'); ?>: </h4></td>
 					<td><input type="checkbox" name="ets_qa_approve" value="yes" <?php if(isset($aprValue) && $aprValue == 'yes'){ echo "checked"; } else { '' ; }?>></td>
 				</tr> 
+				<?php do_action( 'ets_product_qa_setting' );?>
 				<tr><td></td>
 					<td><button type="submit" name="ets_load_more" class="button button-primary button-large"><?php echo __('Submit',"product-questions-answers-for-woocommerce"); ?></button>
 				</tr>
 			</table>
 		</form> 
 
+
 		<?php 
+		
 	} 
 
  	/**
@@ -411,7 +416,10 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 				"user_email"      =>   $newUserEmail,
 				"user_id"	      =>   $newUserId, 
 				"approve"		  =>   $admin_approve 
-			); 
+			);
+
+			$productFirstQa = apply_filters('ets_new_question', $productFirstQa, $productId);
+
 			update_post_meta( $productId, 'ets_question_answer',  $productFirstQa );
 		}  
 
@@ -432,6 +440,8 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					"user_id"	       =>   $newUserId, 
 					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no' 
 				);
+
+				$productNewQas[$qkey] = apply_filters('ets_new_question', $productNewQas[$qkey], $productId);
 				
 				if(empty($productNewQas[$qkey]['question'])) {
 					unset($productNewQas[$qkey]);
@@ -464,6 +474,8 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no' 
 				
 				);
+
+				$productQas[$qkey] = apply_filters('ets_modify_question_data', $productQas[$qkey], $productId, $qkey);
 
 				if(empty($productQas[$qkey]['question'])) {
 					unset($productQas[$qkey]);
