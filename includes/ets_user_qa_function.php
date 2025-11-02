@@ -45,7 +45,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 	public function question_tab( $tabs ) {
 
 		$tabs['ask'] = array(
-			'title'    => apply_filters( 'wc_qa_tab_name', __( __( 'Q & A', 'product-questions-answers-for-woocommerce' ), 'woocommerce' ) ),
+			'title'    => apply_filters( 'wc_qa_tab_name', __( 'Q & A', 'product-questions-answers-for-woocommerce' ) ),
 			'priority' => 50,
 			'callback' => array( $this, 'ets_ask_qustion_tab' ),
 		);
