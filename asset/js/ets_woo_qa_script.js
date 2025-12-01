@@ -38,6 +38,7 @@ jQuery(document).ready(function(){
     	let productId = clickedButton.parent().find("[name='sh-prd-id']").val();
     	let formPrdId = jQuery('.custId').val();
    		let accordionList = clickedButton.parent().find('.ets-accordion-list-qa');
+   		let modernList = clickedButton.parent().find('.ets-modern-list-qa');
    		let tableList = clickedButton.parent().find('.ets-list-table');
     	let qaLength = clickedButton.siblings('.ets_pro_qa_length').find('p').text();
     	let offset = clickedButton.siblings('#ets_product_qa_length').find('p').text();
@@ -57,7 +58,7 @@ jQuery(document).ready(function(){
 	    if (offset == '') {
 	        offset = 0;
 	    }
-    
+
 
 	    jQuery.ajax({
 	        url: etsWooQaParams.admin_ajax,
@@ -67,6 +68,7 @@ jQuery(document).ready(function(){
 	        success: function(res) {
 	            offset = res.offset;
 	            accordionList.append(res.htmlData);
+	            modernList.append(res.htmlData);
 	            tableList.append(res.htmlData);
 	            clickedButton.siblings('#ets_product_qa_length').find('p').html(offset).hide();
 	            if(offset >= qaLength ){

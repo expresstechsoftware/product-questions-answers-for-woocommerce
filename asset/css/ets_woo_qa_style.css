@@ -270,3 +270,246 @@
     display: inline-block;
     color: #d45f56;
 }
+
+.table.table-striped {
+    border-collapse: collapse !important;
+}
+
+.table.table-striped td,
+.table.table-striped th {
+    padding: 10px 5px 0px 5px !important;        /* remove inside space */
+    margin: 0 !important;         /* remove outside space */
+    border: none !important;      /* remove borders if any */
+}
+
+/* Modern Card Layout Styles */
+.ets-qa-modern-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 20px 0;
+}
+
+.ets-qa-pair-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ets-qa-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.ets-qa-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Question Card - Blue Left Border */
+.ets-qa-question-card {
+    border-left: 4px solid #4a90e2;
+}
+
+/* Answer Card - Green Left Border */
+.ets-qa-answer-card {
+    border-left: 4px solid #52c41a;
+}
+
+.ets-qa-no-answer {
+    border-left-color: #d1d5db;
+}
+
+.ets-qa-card-header {
+    padding: 3px 15px 3px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ets-qa-card-body {
+    padding: 13px;
+}
+
+.ets-qa-card-footer {
+    padding: 3px 15px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ets-qa-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ets-qa-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #4a90e2;
+    color: #ffffff;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.ets-qa-icon-answer {
+    background: #52c41a;
+}
+
+.ets-qa-label strong {
+    font-size: 15px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.ets-qa-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2937;
+}
+
+.ets-qa-text.ets-qa-awaiting {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.ets-qa-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+    align-items: center;
+}
+
+.ets-qa-author {
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.ets-qa-date {
+    color: #9ca3af;
+}
+
+/* Admin Badge */
+.ets-qa-admin-badge {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.ets-qa-blog-name {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Like/Dislike Actions */
+.ets-qa-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ets-qa-like,
+.ets-qa-dislike {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.ets-qa-like:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.ets-qa-dislike:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.ets-qa-like-icon,
+.ets-qa-dislike-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.ets-qa-like-count,
+.ets-qa-dislike-count {
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 16px;
+    text-align: center;
+}
+
+.ets-qa-like.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.ets-qa-dislike.active {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* Responsive Design for Modern Layout */
+@media (max-width: 768px) {
+    .ets-qa-modern-layout {
+        gap: 20px;
+    }
+
+    .ets-qa-card-header,
+    .ets-qa-card-body,
+    .ets-qa-card-footer {
+        padding: 14px 16px;
+    }
+
+    .ets-qa-card-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .ets-qa-meta {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .ets-qa-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .ets-qa-text {
+        font-size: 14px;
+    }
+}

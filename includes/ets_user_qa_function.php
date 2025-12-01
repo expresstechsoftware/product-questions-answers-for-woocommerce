@@ -312,8 +312,86 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					$productQaLength = 4;
 
 				}
+				if ( $pagingType == 'modern' ) {
+					?>
+					<div class='ets-qa-listing ets-qa-modern-layout'>
+					<?php
 
-				if ( $pagingType == 'accordion' ) {
+					foreach ( $etsGetQuestion as $key => $value ) {
+						?>
+						<div class="ets-qa-pair-wrapper">
+							<?php do_action( "ets_before_question",  $key, $value, $product );?>
+
+							<!-- Question Card -->
+							<div class="ets-qa-card ets-qa-question-card">
+								<div class="ets-qa-card-header">
+									<div class="ets-qa-label">
+										<span class="ets-qa-icon">Q</span>
+										<strong><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?></strong>
+									</div>
+								</div>
+								<div class="ets-qa-card-body">
+									<p class="ets-qa-text"><?php echo $value['question']; ?></p>
+								</div>
+								<div class="ets-qa-card-footer">
+									<div class="ets-qa-meta">
+										<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
+										<span class="ets-qa-date"><?php echo $value['date']; ?></span>
+									</div>
+									<div class="ets-qa-actions">
+										<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
+											<span class="ets-qa-like-icon">👍</span>
+											<span class="ets-qa-like-count">0</span>
+										</button>
+										<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
+											<span class="ets-qa-dislike-icon">👎</span>
+											<span class="ets-qa-dislike-count">0</span>
+										</button>
+									</div>
+								</div>
+							</div>
+
+							<!-- Answer Card -->
+							<?php if ( ! empty( $value['answer'] ) ) { ?>
+								<div class="ets-qa-card ets-qa-answer-card">
+									<div class="ets-qa-card-header">
+										<div class="ets-qa-label">
+											<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+											<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+										</div>
+									</div>
+									<div class="ets-qa-card-body">
+										<div class="ets-qa-admin-badge">
+											<span class="ets-qa-blog-name"><?php echo get_bloginfo( 'name' ); ?></span>
+										</div>
+										<p class="ets-qa-text"><?php echo $value['answer']; ?></p>
+									</div>
+								</div>
+							<?php } else { ?>
+								<div class="ets-qa-card ets-qa-answer-card ets-qa-no-answer">
+									<div class="ets-qa-card-header">
+										<div class="ets-qa-label">
+											<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+											<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+										</div>
+									</div>
+									<div class="ets-qa-card-body">
+										<p class="ets-qa-text ets-qa-awaiting"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+						<?php
+						$count++;
+						if ( $count > $productQaLength ) {
+							break;
+						}
+					}
+					?>
+					<div class='ets-modern-response-add ets-modern-list-qa'></div>
+					</div>
+					<?php
+				} elseif ( $pagingType == 'accordion' ) {
 					?>
 					<div class='ets-qa-listing'>
 					<?php
@@ -417,49 +495,164 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 				<?php
 			}
 		} else {
-			// Show Question Answer Listing Type Table With OUt Load More
+			// Show Question Answer Listing Without Load More
 			if ( ! empty( $etsGetQuestion ) ) {
-				?>
-				<div class="table-responsive my-table">
-				<table class="table table-striped"> 
-				<?php
-				foreach ( $etsGetQuestion as $key => $value ) {
-					?>
-					 
-					<tr class="ets-question-top">
-						<?php do_action( "ets_before_question",  $key, $value, $product );?>
-							<td class="ets-question-title"><p><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td class="ets-question-description"><p><?php echo $value['question']; ?></p></td> 
-							<td class="ets-cont-right"><h6 class="user-name">
-							<?php
-							echo $value['user_name'] . '<br>';
-							echo ( $value['date'] );
-							?>
-							</h6></td>
-					</tr>
 
+				// Modern Layout without Load More
+				if ( $pagingType == 'modern' ) {
+					?>
+					<div class='ets-qa-listing ets-qa-modern-layout'>
 					<?php
-					if ( ! empty( $value['answer'] ) ) {
+					foreach ( $etsGetQuestion as $key => $value ) {
 						?>
-						<tr>
-							<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td colspan="2"><p> <?php echo $value['answer']; ?></p></td> 
-						</tr> 
-						<?php
-					} else {
-						?>
-						<tr>
-							<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td colspan="2" class="ets-no-answer"><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>	
-						</tr> 
+						<div class="ets-qa-pair-wrapper">
+							
+
+							<!-- Question Card -->
+							<div class="ets-qa-card ets-qa-question-card">
+								<div class="ets-qa-card-header">
+									<div class="ets-qa-label">
+										<span class="ets-qa-icon">Q</span>
+										<strong><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?></strong>
+									</div>
+								</div>
+								<div class="ets-qa-card-body">
+									<p class="ets-qa-text"><?php echo $value['question']; ?></p>
+								</div>
+								<div class="ets-qa-card-footer">
+									<div class="ets-qa-meta">
+										<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
+										<span class="ets-qa-date"><?php echo $value['date']; ?></span>
+									</div>
+									<?php do_action( "ets_before_question",  $key, $value, $product );?>
+									<!-- <div class="ets-qa-actions">
+										<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
+											<span class="ets-qa-like-icon">👍</span>
+											<span class="ets-qa-like-count">0</span>
+										</button>
+										<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
+											<span class="ets-qa-dislike-icon">👎</span>
+											<span class="ets-qa-dislike-count">0</span>
+										</button>
+									</div> -->
+								</div>
+							</div>
+
+							<!-- Answer Card -->
+							<?php if ( ! empty( $value['answer'] ) ) { ?>
+								<div class="ets-qa-card ets-qa-answer-card">
+									<div class="ets-qa-card-header">
+										<div class="ets-qa-label">
+											<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+											<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+										</div>
+									</div>
+									<div class="ets-qa-card-body">
+										<div class="ets-qa-admin-badge">
+											<span class="ets-qa-blog-name"><?php echo get_bloginfo( 'name' ); ?></span>
+										</div>
+										<p class="ets-qa-text"><?php echo $value['answer']; ?></p>
+									</div>
+								</div>
+							<?php } else { ?>
+								<div class="ets-qa-card ets-qa-answer-card ets-qa-no-answer">
+									<div class="ets-qa-card-header">
+										<div class="ets-qa-label">
+											<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+											<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+										</div>
+									</div>
+									<div class="ets-qa-card-body">
+										<p class="ets-qa-text ets-qa-awaiting"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
 						<?php
 					}
+					?>
+					</div>
+					<?php
+				} elseif ( $pagingType == 'accordion' ) {
+					// Accordion Layout without Load More
+					?>
+					<div class='ets-qa-listing'>
+					<?php
+					foreach ( $etsGetQuestion as $key => $value ) {
+						?>
+						<div class="ets-accordion">
+							<?php do_action( "ets_before_question",  $key, $value, $product );?>
+							<span class="que-content"><b><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</b></span>
+							<span class="que-content-des"><?php echo $value['question']; ?></span>
+							<h6><?php echo $value['user_name'] . '<br>'; ?><?php echo $value['date']; ?></h6>
+						</div>
+						<div class="ets-panel">
+						<?php
+						if ( ! empty( $value['answer'] ) ) {
+							?>
+								<span class="ans-content"><b><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</b>
+								</span>
+								<span class="ans-content-des"><?php echo $value['answer']; ?>
+								</span>
+
+							<?php
+						} else {
+							?>
+							<span class="ans-content"><b><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>.</b></span>
+							<span class="ans-content-des"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></span>
+							<?php
+						}
+						?>
+						</div>
+						<?php
+					}
+					?>
+					</div>
+					<?php
+				} else {
+					// Normal Table Layout without Load More
+					?>
+					<div class="table-responsive my-table">
+					<table class="table table-striped">
+					<?php
+					foreach ( $etsGetQuestion as $key => $value ) {
+						?>
+
+						<tr class="ets-question-top">
+							<?php do_action( "ets_before_question",  $key, $value, $product );?>
+								<td class="ets-question-title"><p><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
+								<td class="ets-question-description"><p><?php echo $value['question']; ?></p></td>
+								<td class="ets-cont-right"><h6 class="user-name">
+								<?php
+								echo $value['user_name'] . '<br>';
+								echo ( $value['date'] );
+								?>
+								</h6></td>
+						</tr>
+
+						<?php
+						if ( ! empty( $value['answer'] ) ) {
+							?>
+							<tr>
+								<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
+								<td colspan="2"><p> <?php echo $value['answer']; ?></p></td>
+							</tr>
+							<?php
+						} else {
+							?>
+							<tr>
+								<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
+								<td colspan="2" class="ets-no-answer"><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>
+							</tr>
+							<?php
+						}
+					}
+					?>
+
+					</table>
+					</div>
+					<?php
 				}
-				?>
-				 
-				</table>
-				</div>
-				<?php
 			}
 		}
 		?>
@@ -547,7 +740,84 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 			$count = 1;
 
 			// Show Question Answer Listing Accordion Type With Load More Button
-			if ( $pagingType == 'accordion' ) {
+			if ( $pagingType == 'modern' ) {
+				?>
+				<div class='ets-qa-listing ets-qa-modern-layout'>
+				<?php
+				foreach ( $etsGetQuestion as $key => $value ) {
+					?>
+					<div class="ets-qa-pair-wrapper">
+						<?php do_action( "ets_before_question",  $key, $value, $product );?>
+
+						<!-- Question Card -->
+						<div class="ets-qa-card ets-qa-question-card">
+							<div class="ets-qa-card-header">
+								<div class="ets-qa-label">
+									<span class="ets-qa-icon">Q</span>
+									<strong><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?></strong>
+								</div>
+							</div>
+							<div class="ets-qa-card-body">
+								<p class="ets-qa-text"><?php echo $value['question']; ?></p>
+							</div>
+							<div class="ets-qa-card-footer">
+								<div class="ets-qa-meta">
+									<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
+									<span class="ets-qa-date"><?php echo $value['date']; ?></span>
+								</div>
+								<div class="ets-qa-actions">
+									<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
+										<span class="ets-qa-like-icon">👍</span>
+										<span class="ets-qa-like-count">0</span>
+									</button>
+									<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
+										<span class="ets-qa-dislike-icon">👎</span>
+										<span class="ets-qa-dislike-count">0</span>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Answer Card -->
+						<?php if ( ! empty( $value['answer'] ) ) { ?>
+							<div class="ets-qa-card ets-qa-answer-card">
+								<div class="ets-qa-card-header">
+									<div class="ets-qa-label">
+										<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+										<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+									</div>
+								</div>
+								<div class="ets-qa-card-body">
+									<div class="ets-qa-admin-badge">
+										<span class="ets-qa-blog-name"><?php echo get_bloginfo( 'name' ); ?></span>
+									</div>
+									<p class="ets-qa-text"><?php echo $value['answer']; ?></p>
+								</div>
+							</div>
+						<?php } else { ?>
+							<div class="ets-qa-card ets-qa-answer-card ets-qa-no-answer">
+								<div class="ets-qa-card-header">
+									<div class="ets-qa-label">
+										<span class="ets-qa-icon ets-qa-icon-answer">A</span>
+										<strong><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?></strong>
+									</div>
+								</div>
+								<div class="ets-qa-card-body">
+									<p class="ets-qa-text ets-qa-awaiting"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p>
+								</div>
+							</div>
+						<?php } ?>
+					</div>
+					<?php
+					$count++;
+					if ( $count > $productQaLength ) {
+						break;
+					}
+				}
+				?>
+				</div>
+				<?php
+			} elseif ( $pagingType == 'accordion' ) {
 
 				?>
 				<div class='ets-qa-listing'>
@@ -591,9 +861,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 				<?php
 			} else {
 				// Show Question Answer Listing Type Table With Load More
-				?>
-				 
-				 
+				?> 
 				  
 				<?php
 
