@@ -320,8 +320,6 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					foreach ( $etsGetQuestion as $key => $value ) {
 						?>
 						<div class="ets-qa-pair-wrapper">
-							<?php do_action( "ets_before_question",  $key, $value, $product );?>
-
 							<!-- Question Card -->
 							<div class="ets-qa-card ets-qa-question-card">
 								<div class="ets-qa-card-header">
@@ -338,16 +336,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 										<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
 										<span class="ets-qa-date"><?php echo $value['date']; ?></span>
 									</div>
-									<div class="ets-qa-actions">
-										<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
-											<span class="ets-qa-like-icon">👍</span>
-											<span class="ets-qa-like-count">0</span>
-										</button>
-										<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
-											<span class="ets-qa-dislike-icon">👎</span>
-											<span class="ets-qa-dislike-count">0</span>
-										</button>
-									</div>
+									<?php do_action( "ets_before_question",  $key, $value, $product );?>
 								</div>
 							</div>
 
@@ -380,6 +369,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 									</div>
 								</div>
 							<?php } ?>
+
+							<?php
+							// Hook for premium plugin to add purchaser answers
+							do_action( 'ets_after_answer', $key, $value, $product );
+							?>
 						</div>
 						<?php
 						$count++;
@@ -424,6 +418,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 								<span class="ans-content-des"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></span>
 								<?php
 							}
+							?>
+
+							<?php
+							// Hook for premium plugin to add purchaser answers
+							do_action( 'ets_after_answer', $key, $value, $product );
 							?>
 						</div>
 
@@ -472,10 +471,20 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 								?>
 								<tr>
 									<td class="ets-question-title"><p><?php echo __( 'Answer:', 'product-questions-answers-for-woocommerce' ); ?></p></td>
-									<td colspan="2" class="ets-no-answer" ><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>	
-								</tr> 
+									<td colspan="2" class="ets-no-answer" ><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>
+								</tr>
 								<?php
 							}
+							?>
+							<tr>
+								<td colspan="4">
+									<?php
+									// Hook for premium plugin to add purchaser answers
+									do_action( 'ets_after_answer', $key, $value, $product );
+									?>
+								</td>
+							</tr>
+							<?php
 							$count++;
 							if ( $count > $productQaLength ) {
 								break;
@@ -506,8 +515,6 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					foreach ( $etsGetQuestion as $key => $value ) {
 						?>
 						<div class="ets-qa-pair-wrapper">
-							
-
 							<!-- Question Card -->
 							<div class="ets-qa-card ets-qa-question-card">
 								<div class="ets-qa-card-header">
@@ -524,17 +531,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 										<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
 										<span class="ets-qa-date"><?php echo $value['date']; ?></span>
 									</div>
-									<?php do_action( "ets_before_question",  $key, $value, $product );?>
-									<!-- <div class="ets-qa-actions">
-										<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
-											<span class="ets-qa-like-icon">👍</span>
-											<span class="ets-qa-like-count">0</span>
-										</button>
-										<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
-											<span class="ets-qa-dislike-icon">👎</span>
-											<span class="ets-qa-dislike-count">0</span>
-										</button>
-									</div> -->
+									<?php do_action( "ets_before_question",  $key, $value, $product );?>  
 								</div>
 							</div>
 
@@ -567,6 +564,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 									</div>
 								</div>
 							<?php } ?>
+
+							<?php
+							// Hook for premium plugin to add purchaser answers
+							do_action( 'ets_after_answer', $key, $value, $product );
+							?>
 						</div>
 						<?php
 					}
@@ -602,6 +604,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 							<span class="ans-content-des"><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></span>
 							<?php
 						}
+						?>
+
+						<?php
+						// Hook for premium plugin to add purchaser answers
+						do_action( 'ets_after_answer', $key, $value, $product );
 						?>
 						</div>
 						<?php
@@ -646,6 +653,16 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 							</tr>
 							<?php
 						}
+						?>
+						<tr>
+							<td colspan="4">
+								<?php
+								// Hook for premium plugin to add purchaser answers
+								do_action( 'ets_after_answer', $key, $value, $product );
+								?>
+							</td>
+						</tr>
+						<?php
 					}
 					?>
 
@@ -747,8 +764,6 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 				foreach ( $etsGetQuestion as $key => $value ) {
 					?>
 					<div class="ets-qa-pair-wrapper">
-						<?php do_action( "ets_before_question",  $key, $value, $product );?>
-
 						<!-- Question Card -->
 						<div class="ets-qa-card ets-qa-question-card">
 							<div class="ets-qa-card-header">
@@ -765,16 +780,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 									<span class="ets-qa-author"><?php echo $value['user_name']; ?></span>
 									<span class="ets-qa-date"><?php echo $value['date']; ?></span>
 								</div>
-								<div class="ets-qa-actions">
-									<button class="ets-qa-like" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Like', 'product-questions-answers-for-woocommerce' ); ?>">
-										<span class="ets-qa-like-icon">👍</span>
-										<span class="ets-qa-like-count">0</span>
-									</button>
-									<button class="ets-qa-dislike" data-question-id="<?php echo $key; ?>" title="<?php echo __( 'Dislike', 'product-questions-answers-for-woocommerce' ); ?>">
-										<span class="ets-qa-dislike-icon">👎</span>
-										<span class="ets-qa-dislike-count">0</span>
-									</button>
-								</div>
+								
 							</div>
 						</div>
 
