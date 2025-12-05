@@ -70,7 +70,7 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 			update_option( 'ets_load_more_button','true' );
 			update_option( 'ets_product_q_qa_list_length', '10' );
 			update_option( 'ets_load_more_button_name', __("Load More",'product-questions-answers-for-woocommerce') );
-			update_option( 'ets_product_qa_paging_type', "normal" );
+			update_option( 'ets_product_qa_paging_type', "modern" );
 			$loadButton = get_option( 'ets_load_more_button' );
 
 		}
