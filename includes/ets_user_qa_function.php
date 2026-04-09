@@ -108,20 +108,22 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 
 			$etsUserQusetion = apply_filters('ets_new_question', $etsUserQusetion, $productId);
 
-			$etsBlankArray  = array();
-			$etsGetQuestion = get_post_meta( $productId, 'ets_question_answer', true );
-
-			if ( ! empty( $etsGetQuestion ) ) {
-				array_push( $etsGetQuestion, $etsUserQusetion );
-				$result = update_post_meta( $productId, 'ets_question_answer', $etsGetQuestion );
-			} else {
-				array_push( $etsBlankArray, $etsUserQusetion );
-				$result = update_post_meta( $productId, 'ets_question_answer', $etsBlankArray );
-			}
+			$approve_value = ( get_option( 'ets_qa_approve', 'no' ) === 'yes' ) ? 'yes' : 'no';
+			$etsUserQusetion['approve'] = $approve_value;
+			$result = ets_create_qa_comment(
+				$productId,
+				$etsUserQusetion['question'],
+				'',
+				$etsUserQusetion['user_name'],
+				$etsUserQusetion['user_email'],
+				$etsUserQusetion['user_id'],
+				$etsUserQusetion['approve'],
+				$etsUserQusetion['product_title']
+			);
 		}
 
 		do_action( 'wc_qa_question_save', $productId, $question, $etsCustomerId );
-		if ( isset( $result ) ) {
+		if ( $result ) {
 			// send email notification to admin
 			$response = array(
 				'status'                => 1,
@@ -141,7 +143,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 
 		}
 
-		if ( isset( $result ) ) {
+		if ( $result ) {
 			try {
 				$message = "<a href='$userProfileUrl'>" . $etsCustomerName . "</a> added a question on the <a href='$current_url'> " . $productTitle . "</a>:  <br><div style='background-color: #FFF8DC;border-left: 2px solid #ffeb8e;padding: 10px;margin-top:10px;'>" . $question . '</div>';
 				$to      = $admin_email;
@@ -282,20 +284,10 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 		$productQaLength    = get_option( 'ets_product_q_qa_list_length' );
 		$loadMoreButton     = get_option( 'ets_load_more_button' );
 		$pagingType         = get_option( 'ets_product_qa_paging_type' );
-		$all_questions      = get_post_meta( $productId, 'ets_question_answer', true );
-
-		if ( $all_questions && is_array( $all_questions ) ) {
-
-			$etsGetQuestion = array_filter(
-				$all_questions,
-				function ( $filterQuestion ) {
-					return ( isset( $filterQuestion['approve'] ) && $filterQuestion['approve'] == 'yes' ) || ! isset( $filterQuestion['approve'] );
-				}
-			);
-		}
+		$etsGetQuestion = ets_get_qa_from_comments( $productId, true ); // approved only
 
 		if ( ! empty( $etsGetQuestion ) ) {
-			$keyData = count( $etsGetQuestion );
+			$keyData = ets_count_qa_from_comments( $productId );
 		}
 
 		if ( $loadMoreButton == 1 ) {
@@ -527,20 +519,8 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 		$loadMoreButtonName = get_option( 'ets_load_more_button_name' );
 		$pagingType         = get_option( 'ets_product_qa_paging_type' );
 		$productQaLength    = get_option( 'ets_product_q_qa_list_length' );
-		$allQuestions       = get_post_meta( $productId, 'ets_question_answer', true );
-		if ( $allQuestions && is_array( $allQuestions ) ) {
-
-			$filteredQue = array_filter(
-				$allQuestions,
-				function ( $filterQuestion ) {
-					return ( isset( $filterQuestion['approve'] ) && $filterQuestion['approve'] == 'yes' ) || ! isset( $filterQuestion['approve'] );
-
-				}
-			);
-		}
-
 		$offset         = $offsetdata + $productQaLength;
-		$etsGetQuestion = array_slice( $filteredQue, $offset, $productQaLength );
+		$etsGetQuestion = ets_get_qa_from_comments( $productId, true, $offset, $productQaLength );
 
 		if ( ! empty( $etsGetQuestion ) ) {
 			ob_start();
