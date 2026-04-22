@@ -180,12 +180,12 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 				$userId = $user->ID; 
 				$uesrEmail = $user->user_email;
 			 	?>
-				<form action="#" method="post"  class="ets-qus-form" name="form">  
+				<form action="#" method="post"  class="ets-qus-form" name="form">
 					<textarea id="ques-text-ar" cols="45" rows="3" id="name" class="ets-qa-textarea"   name="question" value="" placeholder="<?php echo __('Enter your question here','product-questions-answers-for-woocommerce') ?>..." height= "75px" ></textarea>
-					<input type="hidden" class="productId useremail" name="usermail" value="<?php echo $uesrEmail ?>">
-					<input type="hidden" class="productId custId" name="product_id" value="<?php echo $productId ?>">
-					<input type="hidden" class="productlength" name="Product_Qa_Length" value="<?php echo $productQaLength ?>">  
-					<input type="hidden" class="producttitle" name="ets_Product_Title" value="<?php echo $productTitle ?>">
+					<input type="hidden" class="productId useremail" name="usermail" value="<?php echo esc_attr( $uesrEmail ); ?>">
+					<input type="hidden" class="productId custId" name="product_id" value="<?php echo intval( $productId ); ?>">
+					<input type="hidden" class="productlength" name="Product_Qa_Length" value="<?php echo intval( $productQaLength ); ?>">
+					<input type="hidden" class="producttitle" name="ets_Product_Title" value="<?php echo esc_attr( $productTitle ); ?>">
 					<div class="ets-display-message"><p></p></div>
 					<div class="ets-dis-message-error"><p></p></div>
 					<button class="ets-submit" type="submit" name="submit" class="btn btn-info" ><?php echo __('Submit','product-questions-answers-for-woocommerce'); ?></button> 
@@ -195,9 +195,9 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 			} else { ?>
 
 				<form action="#" method="post"  id="ets-qus-form" name="form">
-					<input type="hidden" class="productId custId" name="product_id" value="<?php echo $productId ?>">
-					<input type="hidden" id="productlength" class="productlength" name="Product_Qa_Length" value="<?php echo $productQaLength ?>">  
-					<input type="hidden" id="producttitle" name="ets_Product_Title" value="<?php echo $productTitle ?>"> 
+					<input type="hidden" class="productId custId" name="product_id" value="<?php echo intval( $productId ); ?>">
+					<input type="hidden" id="productlength" class="productlength" name="Product_Qa_Length" value="<?php echo intval( $productQaLength ); ?>">
+					<input type="hidden" id="producttitle" name="ets_Product_Title" value="<?php echo esc_attr( $productTitle ); ?>">
 					<?php do_action( 'ets_after_qa_form_fields', $product ); ?>
 				</form>
 				
@@ -319,8 +319,8 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 
 								<?php do_action( "ets_before_question",  $key, $value, $product );?>
 								<span class="que-content"><b><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</b></span>
-								<span class="que-content-des"><?php echo $value['question']; ?></span>
-								<h6><?php echo $value['user_name'] . '<br>'; ?><?php echo $value['date']; ?></h6>
+								<span class="que-content-des"><?php echo esc_html( $value['question'] ); ?></span>
+								<h6><?php echo esc_html( $value['user_name'] ) . '<br>'; ?><?php echo esc_html( $value['date'] ); ?></h6>
 							</div>
 							<div class="ets-panel">
 							<?php
@@ -328,7 +328,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 								?>
 									<span class="ans-content"><b><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</b>
 									</span>
-									<span class="ans-content-des"><?php echo $value['answer']; ?>
+									<span class="ans-content-des"><?php echo wp_kses_post( $value['answer'] ); ?>
 									</span>
 								 
 								<?php
@@ -366,11 +366,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 							<tr class="ets-question-top">
 								<?php do_action( "ets_before_question", $key, $value, $product );?>
 								<td class="ets-question-title"><p><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-								<td class="ets-question-description"><p><?php echo $value['question']; ?></p></td> 
+								<td class="ets-question-description"><p><?php echo esc_html( $value['question'] ); ?></p></td>
 								<td class="ets-cont-right"><h6 class="user-name">
 								<?php
-								echo $value['user_name'] . '<br>';
-								echo ( $value['date'] );
+								echo esc_html( $value['user_name'] ) . '<br>';
+								echo esc_html( $value['date'] );
 								?>
 								</h6></td>
 							</tr>
@@ -379,15 +379,15 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 								?>
 								<tr>
 									<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-									<td colspan="2"><p> <?php echo $value['answer']; ?></p></td> 
-								</tr> 
+									<td colspan="2"><p> <?php echo wp_kses_post( $value['answer'] ); ?></p></td>
+								</tr>
 								<?php
 							} else {
 								?>
 								<tr>
 									<td class="ets-question-title"><p><?php echo __( 'Answer:', 'product-questions-answers-for-woocommerce' ); ?></p></td>
-									<td colspan="2" class="ets-no-answer" ><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>	
-								</tr> 
+									<td colspan="2" class="ets-no-answer" ><h6><p><i><?php echo __( 'Answer awaiting', 'product-questions-answers-for-woocommerce' ); ?>...</i></p></h6></td>
+								</tr>
 								<?php
 							}
 							$count++;
@@ -397,14 +397,14 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 						}
 						?>
 						</tbody>
-						</table>  
+						</table>
 					</div>
 						<?php
 				}
 				?>
 					  
-				<button type="submit" id="ets-load-more" class="btn btn-success ets-qa-load-more" name="ets_load_more" value=""><?php echo $loadMoreButtonName; ?></button>
-				<div class="ets_pro_qa_length"><p hidden><?php echo $keyData; ?></p></div><div id="ets_product_qa_length"><p></p></div>
+				<button type="submit" id="ets-load-more" class="btn btn-success ets-qa-load-more" name="ets_load_more" value=""><?php echo esc_html( $loadMoreButtonName ); ?></button>
+				<div class="ets_pro_qa_length"><p hidden><?php echo intval( $keyData ); ?></p></div><div id="ets_product_qa_length"><p></p></div>
 	
 				<?php
 			}
@@ -421,11 +421,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					<tr class="ets-question-top">
 						<?php do_action( "ets_before_question",  $key, $value, $product );?>
 							<td class="ets-question-title"><p><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td class="ets-question-description"><p><?php echo $value['question']; ?></p></td> 
+							<td class="ets-question-description"><p><?php echo esc_html( $value['question'] ); ?></p></td>
 							<td class="ets-cont-right"><h6 class="user-name">
 							<?php
-							echo $value['user_name'] . '<br>';
-							echo ( $value['date'] );
+							echo esc_html( $value['user_name'] ) . '<br>';
+							echo esc_html( $value['date'] );
 							?>
 							</h6></td>
 					</tr>
@@ -435,7 +435,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 						?>
 						<tr>
 							<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td colspan="2"><p> <?php echo $value['answer']; ?></p></td> 
+							<td colspan="2"><p> <?php echo wp_kses_post( $value['answer'] ); ?></p></td>
 						</tr> 
 						<?php
 					} else {
@@ -538,8 +538,8 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					<div class="ets-accordion">
 						<?php do_action( "ets_before_question",  $key, $value, $product );?>
 						<span class="que-content ans-content"><b><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>:</b></span>
-						<span class="que-content-des"><?php echo $value['question']; ?></span>
-						<h6><?php echo $value['user_name'] . '<br>'; ?><?php echo $value['date']; ?></h6>
+						<span class="que-content-des"><?php echo esc_html( $value['question'] ); ?></span>
+						<h6><?php echo esc_html( $value['user_name'] ) . '<br>'; ?><?php echo esc_html( $value['date'] ); ?></h6>
 					</div>
 					<div class="ets-panel">
 						<?php
@@ -547,7 +547,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 							?>
 							<span class="ans-content"><b><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</b>
 							</span>
-							<span class="ans-content-des"><?php echo $value['answer']; ?>
+							<span class="ans-content-des"><?php echo wp_kses_post( $value['answer'] ); ?>
 							</span>
 						 
 							<?php
@@ -584,11 +584,11 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 					<tr class="ets-question-top">
 						<?php do_action( "ets_before_question",  $key, $value, $product );?>
 						<td class="ets-question-title"><p><?php echo __( 'Question', 'product-questions-answers-for-woocommerce' ); ?>.</p></td>
-						<td class="ets-question-description"><p><?php echo $value['question']; ?></p></td> 
+						<td class="ets-question-description"><p><?php echo esc_html( $value['question'] ); ?></p></td>
 						<td class="ets-cont-right"><h6 class="user-name">
 						<?php
-						echo $value['user_name'] . '<br>';
-							echo ( $value['date'] );
+						echo esc_html( $value['user_name'] ) . '<br>';
+						echo esc_html( $value['date'] );
 						?>
 							</h6>
 						 </td>
@@ -598,7 +598,7 @@ class ETS_WOO_PRODUCT_USER_QUESTION_ANSWER {
 						?>
 						<tr>
 							<td class="ets-question-title"><p><?php echo __( 'Answer', 'product-questions-answers-for-woocommerce' ); ?>:</p></td>
-							<td colspan="2"><p> <?php echo $value['answer']; ?></p></td> 
+							<td colspan="2"><p> <?php echo wp_kses_post( $value['answer'] ); ?></p></td>
 						</tr> 
 						<?php
 					} else {
