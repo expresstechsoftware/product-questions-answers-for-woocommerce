@@ -70,7 +70,7 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 			update_option( 'ets_load_more_button','true' );
 			update_option( 'ets_product_q_qa_list_length', '10' );
 			update_option( 'ets_load_more_button_name', __("Load More",'product-questions-answers-for-woocommerce') );
-			update_option( 'ets_product_qa_paging_type', "normal" );
+			update_option( 'ets_product_qa_paging_type', "modern" );
 			$loadButton = get_option( 'ets_load_more_button' );
 
 		}
@@ -151,6 +151,7 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 				<tr>
 					<td><h4><?php echo __('Layout','product-questions-answers-for-woocommerce'); ?>: </h4></td>
 					<td><select name="paging_type">
+						<option value="modern" <?php if($pagingType == "modern") { ?> selected <?php }?>><?php echo __('Modern','product-questions-answers-for-woocommerce');?></option>
 					    	<option value="normal" <?php if($pagingType == "normal") { ?> selected <?php }?>><?php echo __('Normal','product-questions-answers-for-woocommerce');?></option>
 					    	<option value="accordion"  <?php if($pagingType == "accordion") { ?> selected <?php }?>><?php echo __('Accordion','product-questions-answers-for-woocommerce');?></option>
 						</select>
@@ -307,7 +308,9 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 							);					
 						}
 						do_action('wc_after_qa_inputs', $productId, $key);
-						?>	
+						// Hook for premium plugin to add custom links/buttons for each Q&A
+						do_action( 'ets_qna_admin_display', $key, $value, $productId );
+						?>
 					<div class="image-preview">
 
 						<div class="ets-qa-drop">
@@ -479,9 +482,11 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 
 				if(empty($productQas[$qkey]['question'])) {
 					unset($productQas[$qkey]);
-				}  
-			} 
-
+				} else {
+					// Fire hook for each individual Q&A pair
+					do_action( 'ets_qna_edit', $qkey, $productQas[$qkey], $productId );
+				}
+			}
 			do_action('wc_after_qa_update', $productId, $productQas); 
 			// update meta for answer at user question.	   
 		 	update_post_meta( $productId, 'ets_question_answer',  $productQas );  

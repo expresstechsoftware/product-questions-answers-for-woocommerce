@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'ETS_WOO_QA_PATH', plugin_dir_url( __FILE__ ) );
+define( 'ETS_WOO_QA_BASE_PLUGIN_ACTIVE', true );
 
 class ETS_WOO_PRODUCT_QUESTION_ANSWER {
 	public function __construct() {
