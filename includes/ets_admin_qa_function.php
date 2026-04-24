@@ -208,15 +208,23 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 				<?php
 				global $post; 
 				$productId = $post->ID; 
-				$etsGetQuestion = get_post_meta( $productId,'ets_question_answer', true ); 
+				$etsGetQuestion = ets_get_qa_from_comments( $productId, false ); // false = include unapproved
 				if(!empty($etsGetQuestion)){   
 					foreach ($etsGetQuestion as $key => $value) { 
 							// to create hidden input field
-						?> <li id="ets-qa-item-<?php echo $key;?>" class="ets-qa-item" style="position: relative;"> 
-						<?php 
-					 	woocommerce_wp_hidden_input( 
-							array(  
-								'class'		  => "ets_user_name[$key]", 
+						?> <li id="ets-qa-item-<?php echo $value['comment_id'];?>" class="ets-qa-item" style="position: relative;">
+						<?php
+						woocommerce_wp_hidden_input(
+							array(
+								'id'    => "ets_comment_id[$key]",
+								'name'  => "ets_comment_id[$key]",
+								'class' => "ets_comment_id[$key]",
+								'value' => $value['comment_id'],
+							)
+						);
+					 	woocommerce_wp_hidden_input(
+							array(
+								'class'		  => "ets_user_name[$key]",
 								'id'		  => "ets_user_name[$key]",
 								'name'		  => "ets_user_name[$key]",
 								'value'       => $value['user_name'],
@@ -314,7 +322,7 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 							<img class="ets-scroll-move" src="<?php echo ETS_WOO_QA_PATH . "asset/images/Cursor-Move.png"; ?>" style="max-width: 15px;">
 						</div> 
 						<div class="ets-qa-delete">
-							<img src="<?php echo ETS_WOO_QA_PATH . "asset/images/delet.png"; ?>" style="max-width: 20px;" data-questionkey="<?php echo $key; ?>" id="ets-delete-qa"  class="ets-del-qa">
+							<img src="<?php echo ETS_WOO_QA_PATH . "asset/images/delet.png"; ?>" style="max-width: 20px;" data-questionkey="<?php echo $value['comment_id']; ?>" id="ets-delete-qa"  class="ets-del-qa">
 							
 						</div>
 					</div>
@@ -391,16 +399,19 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 		$userEmail = isset($_POST['ets_user_email']) && $_POST['ets_user_email'] && is_array($_POST['ets_user_email']) ? array_map('sanitize_email', $_POST['ets_user_email']) : '';
 
 		$admin_approve = isset($_POST['ets_admin_apv']) ? (is_array($_POST['ets_admin_apv']) ? array_map('sanitize_text_field' , $_POST['ets_admin_apv']) : '') : [];
-		
+
+		$commentIds = isset( $_POST['ets_comment_id'] )
+			? ( is_array( $_POST['ets_comment_id'] ) ? array_map( 'intval', $_POST['ets_comment_id'] ) : array() )
+			: array();
+
 		$newDate = date("d-M-Y");
-		$user = wp_get_current_user();  
+		$user = wp_get_current_user();
 		$newUesrName = $user->user_login;
 		$newUserId = $user->ID;
 		$newUserEmail = $user->user_email;
 		$question = isset($_POST['ets_first_question']) && $_POST['ets_first_question'] ? sanitize_text_field($_POST['ets_first_question']) : '';
 		$answer = isset($_POST['ets_first_answer']) && $_POST['ets_first_answer'] ? sanitize_textarea_field($_POST['ets_first_answer']) : '';
 		$prdTitle = get_the_title();
-		$before_save = get_post_meta( $productId,'ets_question_answer', true );
 		do_action('wc_before_qa_save', $productId);
 	
 		//Insert the first New Question
@@ -420,10 +431,18 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 
 			$productFirstQa = apply_filters('ets_new_question', $productFirstQa, $productId);
 
-			update_post_meta( $productId, 'ets_question_answer',  $productFirstQa );
-		}  
-
-		$productQas = get_post_meta( $productId, 'ets_question_answer', true );
+			$firstItem = $productFirstQa[0];
+			ets_create_qa_comment(
+				$productId,
+				$firstItem['question'],
+				isset( $firstItem['answer'] ) ? $firstItem['answer'] : '',
+				$firstItem['user_name'],
+				isset( $firstItem['user_email'] ) ? $firstItem['user_email'] : $newUserEmail,
+				isset( $firstItem['user_id'] ) ? $firstItem['user_id'] : $newUserId,
+				is_array( $firstItem['approve'] ) ? 'no' : ( $firstItem['approve'] ?: 'no' ),
+				isset( $firstItem['product_title'] ) ? $firstItem['product_title'] : $prdTitle
+			);
+		}
 
 
 		//On Click Add new Field New Question
@@ -445,23 +464,32 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 				
 				if(empty($productNewQas[$qkey]['question'])) {
 					unset($productNewQas[$qkey]);
-				}  
+				}
 			}
-			// update meta with data 
-			if(!empty($productQas)){
-				$productNewQasList = array_merge( $productQas, $productNewQas);
-
-				 update_post_meta( $productId, 'ets_question_answer', $productNewQasList );
-			} else if(!empty($productFirstQa)){
-				$productNewQasList = array_merge( $productFirstQa, $productNewQas);  
-				 update_post_meta( $productId, 'ets_question_answer', $productNewQasList );
-			} else {
-				 update_post_meta( $productId, 'ets_question_answer', $productNewQas );
-			}	 
-		} else { 
+			foreach ( $productNewQas as $qaItem ) {
+				ets_create_qa_comment(
+					$productId,
+					$qaItem['question'],
+					$qaItem['answer'],
+					$qaItem['user_name'],
+					$qaItem['user_email'],
+					$qaItem['user_id'],
+					$qaItem['approve'] ?: 'no',
+					isset( $qaItem['product_title'] ) ? $qaItem['product_title'] : $prdTitle
+				);
+			}
+		} else {
 			
-			//Edit the Question And Answer	  
-			foreach ( $questions as $qkey => $q) {  
+			//Edit the Question And Answer
+			$before_answers = array();
+			foreach ( $commentIds as $cid ) {
+				if ( $cid > 0 ) {
+					$before_answers[$cid] = get_comment_meta( $cid, 'qa_answer', true );
+				}
+			}
+
+			$productQas = array();
+			foreach ( $questions as $qkey => $q) {
 
 				$productQas[$qkey] = array(
 					"product_title"  =>   $productTitle[$qkey],
@@ -469,65 +497,67 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 					"user_email"     =>   $userEmail[$qkey],
 					"user_name"	     =>   $userName[$qkey],
 					"question" 	     =>   $q,
-					"answer"	     =>   $answers[$qkey], 
+					"answer"	     =>   $answers[$qkey],
 					"date"		     =>   $date[$qkey],
-					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no' 
-				
+					"approve"		 =>   isset($admin_approve[$qkey]) ? $admin_approve[$qkey] : 'no'
 				);
 
 				$productQas[$qkey] = apply_filters('ets_modify_question_data', $productQas[$qkey], $productId, $qkey);
 
 				if(empty($productQas[$qkey]['question'])) {
 					unset($productQas[$qkey]);
-				}  
-			} 
+					continue;
+				}
 
-			do_action('wc_after_qa_update', $productId, $productQas); 
-			// update meta for answer at user question.	   
-		 	update_post_meta( $productId, 'ets_question_answer',  $productQas );  
+				$comment_id = isset( $commentIds[$qkey] ) ? $commentIds[$qkey] : 0;
+				if ( $comment_id > 0 ) {
+					ets_update_qa_comment(
+						$comment_id,
+						$productQas[$qkey]['question'],
+						$productQas[$qkey]['answer'],
+						$productQas[$qkey]['approve'] ?: 'no'
+					);
+				}
+			}
+
+			do_action('wc_after_qa_update', $productId, $productQas);
 
 		}
 		do_action('wc_after_qa_save', $productId);
 
-		//user mail from admin
-		$after_save = get_post_meta( $productId,'ets_question_answer', true );
+		// Email notifications: compare old vs new answers for edited questions
+		if ( ! empty( $questions ) && ! empty( $commentIds ) ) {
+			foreach ( $questions as $qkey => $q ) {
+				$comment_id = isset( $commentIds[$qkey] ) ? $commentIds[$qkey] : 0;
+				if ( $comment_id <= 0 ) continue;
 
-		if ($after_save) {
-			foreach ($after_save as $key => $value) {
+				$new_answer = isset( $answers[$qkey] ) ? trim( $answers[$qkey] ) : '';
+				$old_answer = isset( $before_answers[$comment_id] ) ? trim( $before_answers[$comment_id] ) : '';
+				$to         = isset( $userEmail[$qkey] ) ? $userEmail[$qkey] : '';
+				if ( empty( $to ) || empty( $new_answer ) ) continue;
 
-				$to = $value['user_email'];
-				$userName = $value['user_name'];
-				$productTitle = $value['product_title'];
-				$answers = $value['answer'];
-				$url = get_permalink( $productId);
-				$site_url = get_site_url();       
-				$site_name = get_bloginfo('name');  				
+				$url       = get_permalink( $productId );
+				$site_url  = get_site_url();
+				$site_name = get_bloginfo( 'name' );
+				$pTitle    = isset( $productTitle[$qkey] ) ? $productTitle[$qkey] : get_the_title( $productId );
+				$uName     = isset( $userName[$qkey] ) ? $userName[$qkey] : '';
 
-				// If the answer was changed
-				if ( $before_save && !empty(trim($value['answer'])) && !empty(trim($value['user_email'])) && (trim($value['answer']) != trim($before_save[$key]['answer']) && !empty( trim( $before_save[$key]['answer'] )  ) ) )
-				{
-
-			 		$subject =apply_filters("wc_qa_answer_updated_mail_subject" ,__("Answer to Your Question was Updated",'product-questions-answers-for-woocommerce'). ': ' . get_bloginfo('name'));
-			 		$message = "Dear " . $userName . ",<br><br>";
-			 		$message .= "<a href='$site_url'>" . $site_name . "</a> updated an answer to your question on the product <a href='$url'> " . $productTitle ."</a>:  <br><div style='background-color: #FFF8DC;border-left: 2px solid #ffeb8e;padding: 10px;margin-top:10px;'>". $answers ."</div>";
-
-			 		$message = apply_filters("wc_qa_answer_updated_mail_message", $message, $productTitle, $answers);
-
-				    $res = wp_mail($to, $subject, $message);
-				 
-				// First time answer    
-				} elseif ( $before_save && empty( trim( $before_save[$key]['answer'] ) ) && !empty( trim( $value['answer'] ) )  && !empty(trim($value['user_email'])) ) {  
-					$subject = __("Your Question was Answered",'product-questions-answers-for-woocommerce'). ': ' . get_bloginfo('name');
-			 		$subject = apply_filters("wc_qa_new_answer_mail_subject", $subject);
-			 		$message = "Dear " . $userName . ",<br><br>";
-			 		$message .= "<a href='$site_url'>" . $site_name . "</a> added an answer on the product <a href='$url'> " . $productTitle ."</a>:  <br><div style='background-color: #FFF8DC;border-left: 2px solid #ffeb8e;padding: 10px;margin-top:10px;'>". $answers ."</div>";
-
-			 		$message = apply_filters("wc_qa_new_answer_mail_message", $message, $productTitle, $answers);
-				    $res = wp_mail($to, $subject, $message);
+				if ( ! empty( $old_answer ) && $new_answer !== $old_answer ) {
+					$subject = apply_filters( 'wc_qa_answer_updated_mail_subject',
+						__( 'Answer to Your Question was Updated', 'product-questions-answers-for-woocommerce' ) . ': ' . $site_name );
+					$message = "Dear {$uName},<br><br><a href='{$site_url}'>{$site_name}</a> updated an answer to your question on the product <a href='{$url}'>{$pTitle}</a>:<br><div style='background-color:#FFF8DC;border-left:2px solid #ffeb8e;padding:10px;margin-top:10px;'>{$new_answer}</div>";
+					$message = apply_filters( 'wc_qa_answer_updated_mail_message', $message, $pTitle, $new_answer );
+					wp_mail( $to, $subject, $message );
+				} elseif ( empty( $old_answer ) && ! empty( $new_answer ) ) {
+					$subject = apply_filters( 'wc_qa_new_answer_mail_subject',
+						__( 'Your Question was Answered', 'product-questions-answers-for-woocommerce' ) . ': ' . $site_name );
+					$message = "Dear {$uName},<br><br><a href='{$site_url}'>{$site_name}</a> added an answer on the product <a href='{$url}'>{$pTitle}</a>:<br><div style='background-color:#FFF8DC;border-left:2px solid #ffeb8e;padding:10px;margin-top:10px;'>{$new_answer}</div>";
+					$message = apply_filters( 'wc_qa_new_answer_mail_message', $message, $pTitle, $new_answer );
+					wp_mail( $to, $subject, $message );
 				}
 			}
 		}
-	} 
+	}
 
 	/**
 	 * Change Order Q&A 
@@ -544,18 +574,19 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 			die; 
 		}
 
-		$newOrderQaList = array(); 
-		$productId = intval($_POST['product_id']);  
- 		
- 		$changedOrderQaList = isset( $_POST['ets-qa-item']) ? (is_array($_POST['ets-qa-item']) ? array_map('intval',$_POST['ets-qa-item']) : '') : '';  
+		$changedOrderQaList = isset( $_POST['ets-qa-item'] )
+			? ( is_array( $_POST['ets-qa-item'] ) ? array_map( 'intval', $_POST['ets-qa-item'] ) : array() )
+			: array();
 
-		$productQas = get_post_meta($productId,'ets_question_answer',true);
-		 
-		foreach($changedOrderQaList as $index) {
-			$newOrderQaList[$index] = $productQas[$index];
-		} 
-		
-		update_post_meta( $productId, 'ets_question_answer',  $newOrderQaList );		 
+		foreach ( $changedOrderQaList as $position => $comment_id ) {
+			if ( $comment_id > 0 ) {
+				update_comment_meta( $comment_id, 'qa_order', $position );
+			}
+		}
+
+		$response = array( 'status' => 1 );
+		echo json_encode( $response );
+		die;
 	}
 
 	/**
@@ -616,11 +647,10 @@ class ETS_WOO_PRODUCT_ADMIN_QUESTION_ANSWER
 			die; 
 		}
 
-		$questionIndex = intval($_POST['questionIndex']);
-		$productId = intval($_POST['prdId']); 
-		$productQas = get_post_meta( $productId, 'ets_question_answer', true );
-		unset($productQas[$questionIndex]);
-		update_post_meta( $productId, 'ets_question_answer',  $productQas ); 
+		$comment_id = intval( $_POST['questionIndex'] );
+		if ( $comment_id > 0 ) {
+			ets_delete_qa_comment( $comment_id );
+		}
 	}
 
 	/**
